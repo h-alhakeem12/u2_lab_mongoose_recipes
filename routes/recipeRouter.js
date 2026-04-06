@@ -4,15 +4,27 @@ const Recipe = require("../models/Recipe.js")
 const recipeController = require("../controllers/recipeController")
 
 router.post("/", recipeController.createRecipe)
+
 router.get("/", recipeController.getAllRecipes)
-router.get("/:id", recipeController.getRecipeById)
-router.put("/:id", recipeController.updateRecipeById)
-router.delete("/:id", recipeController.deleteRecipeById)
+
 router.get("/new", (req, res) => {
-  res.render("./recipes/new.ejs")
+  res.render("recipes/new.ejs")
 })
+
+router.get("/:id", recipeController.getRecipeById)
+
 router.get("/:id/edit", async (req, res) => {
-  const recipe = await Recipe.findById(req.params.id)
-  res.render("./recipes/edit.ejs", { recipe })
+  try {
+    const recipe = await Recipe.findById(req.params.id)
+    res.render("recipes/edit.ejs", { recipe })
+  } catch (error) {
+    console.error(error)
+    res.redirect("/recipes")
+  }
 })
+
+router.put("/:id", recipeController.updateRecipeById)
+
+router.delete("/:id", recipeController.deleteRecipeById)
+
 module.exports = router

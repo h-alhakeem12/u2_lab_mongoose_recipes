@@ -11,7 +11,7 @@ const getAllUSers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate("recipes")
+    const user = await User.findById(req.params.id)
     const recipes = await Recipe.find({ author: user._id })
     const data = {
       _id: user._id,
